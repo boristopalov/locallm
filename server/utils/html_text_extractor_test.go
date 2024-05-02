@@ -1,6 +1,7 @@
 package utils_test
 
 import (
+	"os"
 	"testing"
 
 	"github.com/boristopalov/localsearch/utils"
@@ -15,6 +16,12 @@ type testCase struct {
 
 func TestExtractText(t *testing.T) {
 	// Define test cases
+	d, err := os.ReadFile("../html_test.txt")
+	if err != nil {
+		t.Error("error reading file: ", err.Error())
+		return
+	}
+
 	testCases := []testCase{
 		{
 			name:     "Simple HTML content",
@@ -40,6 +47,11 @@ func TestExtractText(t *testing.T) {
 			name:     "HTML content containing special characters",
 			html:     "<div>&lt; &gt; &amp; &quot; &apos;</div>",
 			expected: "< > & \" '",
+		},
+		{
+			name:     "long HTML with table",
+			html:     string(d),
+			expected: "",
 		},
 	}
 

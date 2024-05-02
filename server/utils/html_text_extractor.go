@@ -3,27 +3,15 @@ package utils
 import (
 	"strings"
 
-	"golang.org/x/net/html"
+	"github.com/microcosm-cc/bluemonday"
 )
 
-func ExtractText(htmlContent string) string {
-	var textBuilder strings.Builder
-	tokenizer := html.NewTokenizer(strings.NewReader(htmlContent))
-
-	for {
-		tokenType := tokenizer.Next()
-		if tokenType == html.ErrorToken {
-			break
-		}
-
-		if tokenType == html.TextToken {
-			text := strings.TrimSpace(tokenizer.Token().Data)
-			if text != "" {
-				textBuilder.WriteString(text)
-				textBuilder.WriteString("\n")
-			}
-		}
-	}
-
-	return textBuilder.String()
+func ExtractText(html string) string {
+	policy := bluemonday.StrictPolicy()
+	result := policy.Sanitize(html)
+	// result = strings.ReplaceAll(result, "\n", "")
+	result = strings.ReplaceAll(result, "\t", "")
+	result = strings.ReplaceAll(result, "&#34;", "")
+	result = strings.ReplaceAll(result, "&#39;", "")
+	return result
 }

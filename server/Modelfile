@@ -1,4 +1,8 @@
-FROM llama2
+FROM llama3
 
-PARAMETER temperature 0
+PARAMETER temperature 0.1
 PARAMETER stop "Observation:"
+
+PARAMETER stop "<|start_header_id|>"
+PARAMETER stop "<|end_header_id|>"
+PARAMETER stop "<|eot_id|>"
